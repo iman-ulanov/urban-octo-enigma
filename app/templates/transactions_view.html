@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="text-center mb-5 mt-5">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+  </head>
+  <body>
+  {% if current_user.is_authenticated %}
+  <p><strong> Вы авторизованы как-{{ current_user }} </strong></p>
+  <a class="btn btn-dark" href="{{ url_for('transaction_add') }}">Добавить транзакцию</a>
+  <a class="btn btn-warning" href="{{ url_for('logout') }}">Выйти из аккаунта</a>
+
+  {% else %}
+  <p class="text-right mb-2 mt-2" style="color:#8FBC8F"><strong> просмотр страницы в режиме гостя </strong></p>
+  <p class="text-right"><a class="btn btn-primary" href="{{ url_for('login') }}">Войти</a> или <a class="btn btn-primary" href="{{ url_for('register') }}">Зарегистрироваться</a></p>
+  {% endif %}
+ </div>
+<center>
+<h1 >Список транзакций</h1>
+</center>
+
+<table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Период транзакции</th>
+          <th scope="col">Сумма</th>
+          <th scope="col">Статус</th>
+          <th scope="col">Валюта</th>
+          <th scope="col">Комментарии</th>
+          <th scope="col">Подробнее</th>
+        </tr>
+      </thead>
+      {% for transaction in transactions %}
+      <tbody>
+        <tr>
+          <th scope="row">{{ transaction.id }}</th>
+            <td>{{ transaction.period }}</td>
+            <td>{{ transaction.value }}</td>
+            <td>{{ transaction.status }}</td>
+            <td>{{ transaction.unit }}</td>
+            <td>{{ transaction.subject }}</td>
+            <td>
+                <a class="btn btn-outline" href="{{ url_for('transaction_detail', id=transaction.id) }}">Подробнее</a>
+            </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+{% endblock content %}
